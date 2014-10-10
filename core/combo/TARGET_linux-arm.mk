@@ -70,6 +70,8 @@ TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
 TARGET_arm_CFLAGS :=    -Ofast \
                         -fno-unsafe-math-optimizations \
+                        -fomit-frame-pointer \
+                        -funswitch-loops
                         -fgcse-las \
                         -pipe
 
@@ -77,6 +79,7 @@ TARGET_arm_CFLAGS :=    -Ofast \
 TARGET_thumb_CFLAGS :=  -O3 \
                         -fno-unroll-loops \
                         -mthumb \
+                        -fomit-frame-pointer \
                         -fgcse-las \
                         -pipe
 
@@ -94,7 +97,7 @@ android_config_h := $(call select-android-config-h,linux-arm)
 
 TARGET_GLOBAL_CFLAGS += \
 			-Ofast \
-			-fpic -fPIE \
+			-msoft-float -fpic -fPIE \
 			-ffunction-sections \
 			-fdata-sections \
 			-funwind-tables \
@@ -103,9 +106,9 @@ TARGET_GLOBAL_CFLAGS += \
 			-Werror=format-security \
 			-D_FORTIFY_SOURCE=2 \
 			-fno-short-enums \
+			-no-canonical-prefixes \
+			-fno-canonical-system-headers \
 			-fgcse-las \
-            		-Wstrict-aliasing \
-			-Werror=strict-aliasing \
 			$(arch_variant_cflags) \
 			-include $(android_config_h) \
 			-I $(dir $(android_config_h))
@@ -143,7 +146,12 @@ TARGET_GLOBAL_CPPFLAGS += $(call cc-option,-std=gnu++11)
 endif
 
 # More flags/options can be added here
-TARGET_RELEASE_CFLAGS :=
+TARGET_RELEASE_CFLAGS += \
+			-DNDEBUG \
+			-fgcse-after-reload \
+			-frerun-cse-after-loop \
+			-frename-registers \
+			-pipe
 
 libc_root := bionic/libc
 libm_root := bionic/libm
