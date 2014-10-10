@@ -142,6 +142,13 @@ ifeq ($(strip $(LOCAL_ENABLE_APROF)),true)
   LOCAL_CPPFLAGS += -fno-omit-frame-pointer -fno-function-sections -pg
 endif
 
+ifeq ($(strip $(ENABLE_GRAPHITE)),true)
+        ifneq ($(strip $(LOCAL_DISABLE_GRAPHITE)),true)
+            LOCAL_CFLAGS += -fgraphite-identity -floop-flatten -ftree-loop-linear -ftree-loop-distribution -floop-interchange -floop-strip-mine -floop-block
+        LOCAL_CPPFLAGS += -fgraphite-identity -floop-flatten -ftree-loop-linear -ftree-loop-distribution -floop-interchange -floop-strip-mine -floop-block
+        endif
+    endif
+
 ###########################################################
 ## Explicitly declare assembly-only __ASSEMBLY__ macro for
 ## assembly source

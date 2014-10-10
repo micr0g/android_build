@@ -6,23 +6,47 @@ ARCH_ARM_HAVE_VFP               := true
 ARCH_ARM_HAVE_VFP_D32           := true
 ARCH_ARM_HAVE_NEON              := true
 
-ifeq ($(strip $(TARGET_CPU_VARIANT)), cortex-a15)
-	arch_variant_cflags := -mcpu=cortex-a15
-else
-ifeq ($(strip $(TARGET_CPU_VARIANT)),cortex-a8)
-	arch_variant_cflags := -mcpu=cortex-a8
-else
-ifeq ($(strip $(TARGET_CPU_VARIANT)),cortex-a7)
-	arch_variant_cflags := -mcpu=cortex-a7
-else
-	arch_variant_cflags := -march=armv7-a
-endif
-endif
-endif
+ENABLE_GRAPHITE                 := true
+
+TARGET_USE_KRAIT_BIONIC_OPTIMIZATION := true
+TARGET_USE_KRAIT_PLD_SET := true
+TARGET_KRAIT_BIONIC_PLDOFFS := 10
+TARGET_KRAIT_BIONIC_PLDTHRESH := 64
+TARGET_KRAIT_BIONIC_BBTHRESH := 64
+TARGET_KRAIT_BIONIC_PLDSIZE := 64
 
 arch_variant_cflags += \
     -mfloat-abi=softfp \
-    -mfpu=neon
+    -mfpu=neon \
+    -DHARDFLOAT \
+    -DSK_HARDWARE_FLOAT \
+    -DNDEBUG \
+    -mcpu=cortex-a15 \
+    -mtune=cortex-a15 \
+    -fira-loop-pressure \
+    -mvectorize-with-neon-quad \
+    -fforce-addr \
+    -funsafe-loop-optimizations \
+    -funroll-loops \
+    -fsection-anchors \
+    -fivopts \
+    -ftree-loop-im \
+    -ftree-loop-ivcanon \
+    -ffunction-sections \
+    -fgcse-las \
+    -fgcse-sm \
+    -fweb \
+    -ffp-contract=fast \
+    -fgraphite-identity \
+    -floop-flatten \
+    -ftree-loop-linear \
+    -floop-interchange \
+    -ftree-loop-distribution \
+    -Wno-unused-parameter \
+    -Wno-unused-value \
+    -Wno-unused-function \
+    -pipe
+    
 
 arch_variant_ldflags := \
 	-Wl,--fix-cortex-a8
