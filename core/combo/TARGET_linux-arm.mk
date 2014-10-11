@@ -71,7 +71,7 @@ TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 TARGET_arm_CFLAGS :=    -Ofast \
                         -fno-unsafe-math-optimizations \
                         -fomit-frame-pointer \
-                        -funswitch-loops
+                        -funswitch-loops \
                         -fgcse-las \
                         -pipe
 
